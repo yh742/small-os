@@ -1,7 +1,7 @@
 #include "interrupt.h"
 #include "idt.h"
 #include "fb.h"
-
+#include "stddef.h"
 
 interrupt_handler_t interrupt_handlers[IDT_NUM_ENTRIES];
 
@@ -9,7 +9,7 @@ unsigned int register_interrupt_handler(unsigned int interrupt, interrupt_handle
 {
 	if (interrupt > 255)
 		return 1;
-	if (interrupt_handlers[interrupt] != (void *)0)
+	if (interrupt_handlers[interrupt] != NULL)
 		return 1;
 	interrupt_handlers[interrupt] = handler;
 	return 0;
@@ -17,7 +17,7 @@ unsigned int register_interrupt_handler(unsigned int interrupt, interrupt_handle
 
 void interrupt_handler(struct cpu_info state, struct idt_info info, struct stack_state exec)
 {
-	if (interrupt_handlers[info.idt_index] != (void *)0)
+	if (interrupt_handlers[info.idt_index] != NULL)
 	{
 		interrupt_handlers[info.idt_index](state, info, exec);
 	}

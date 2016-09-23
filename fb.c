@@ -40,6 +40,57 @@ static void scroll()
 	}
 }
 
+void fb_write_byte(char* byte)
+{
+	fb_write(byte, 1);
+}
+
+void fb_write_ui(unsigned int val)
+{
+	unsigned int n, digit;
+    	if (val >= 1000000000) {
+		n = 1000000000;
+        } else {
+	       	n = 1;
+	       	while (n*10 <= val) {
+			n *= 10;
+		}
+	}
+    	while (n > 0) {
+            digit = val / n;
+	    char c = '0' + digit;
+            fb_write_byte(&c);
+            val %= n;
+            n /= 10;
+    	}
+}
+
+
+void fb_write_hex(unsigned int n)
+{
+	char *chars = "0123456789ABCDEF";
+	unsigned char b = 0;
+	int i;
+
+	fb_write_s("0x");
+	for (i = 7; i >= 0; --i) {
+		b = (n >> i*4) & 0x0F;
+	        fb_write_byte(&chars[b]);
+	}
+}
+
+
+
+void fb_write_s(char *buf)
+{
+	char *c;
+	unsigned int len = 0;
+	for (c = buf; *c < '\0'; c++)
+		len++;
+	fb_write(buf, len);
+	
+}
+
 int fb_write(char *buf, unsigned int len)
 {
 	unsigned int i = 0;	

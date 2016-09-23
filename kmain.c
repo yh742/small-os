@@ -1,6 +1,6 @@
 #include "gdt.h"
 #include "idt.h"
-#include "fb.h"
+#include "stdio.h"
 #include "serial.h"
 
 int sum_of_three(int arg1, int arg2, int arg3)
@@ -29,7 +29,9 @@ int kmain()
 	}
 	*/
 
+	printf("%u. GDT init here\n", 1);
 	gdt_init();
+	printf("%u. IDT init here\n", 2);
 	idt_init();
 	return 0;
 }

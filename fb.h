@@ -23,6 +23,16 @@ void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg);
 
 void fb_move_cursor(unsigned short pos);
 
+void fb_write_byte(char *alph);
+
+void fb_write_ui(unsigned int val);
+
+void fb_write_hex(unsigned int val);
+
+void fb_write_s(char *buf);
+
 int fb_write(char *buf, unsigned int len);
+
+
 
 #endif
