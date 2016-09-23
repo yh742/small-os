@@ -1,16 +1,22 @@
 #include "interrupt.h"
 #include "idt.h"
-#include "fb.h"
 #include "stddef.h"
+#include "stdio.h"
+#include "pic.h"
 
 interrupt_handler_t interrupt_handlers[IDT_NUM_ENTRIES];
 
 unsigned int register_interrupt_handler(unsigned int interrupt, interrupt_handler_t handler)
 {
-	if (interrupt > 255)
+	if (interrupt > 255){
 		return 1;
-	if (interrupt_handlers[interrupt] != NULL)
+	}
+
+	if (interrupt_handlers[interrupt] != NULL){
 		return 1;
+	}
+
+	printf("Registering interrupt #%u", interrupt);
 	interrupt_handlers[interrupt] = handler;
 	return 0;
 }
@@ -23,7 +29,6 @@ void interrupt_handler(struct cpu_info state, struct idt_info info, struct stack
 	}
 	else
 	{
-		char buff[] = "ISR does not exist!";
-		fb_write(buff, sizeof(buff) - 1);
+		printf("Interrupt handler for IRQ#%u does not exist!", info.idt_index);
 	}
 }

@@ -27,6 +27,6 @@ loader:
 ;	push dword 1
 ;	call sum_of_three
 
-.loop:
-	jmp .loop
+.hang:
+	jmp .hang
 				

@@ -15,7 +15,7 @@
 struct idt_ptr {
 	unsigned short size;
 	unsigned int address;
-};
+} __attribute__((packed));
 
 struct idt_gate {
 	unsigned short offset_low;
@@ -23,7 +23,7 @@ struct idt_gate {
 	unsigned char zero;	// reserved
 	unsigned char config;
 	unsigned short offset_high;
-};
+} __attribute__((packed));
 
 struct idt_gate idt[IDT_NUM_ENTRIES];
 
@@ -75,7 +75,7 @@ DECLARE_INT_HANDLER(47);
 void idt_init()
 {
 	struct idt_ptr ptr; 
-	ptr.size = sizeof(struct idt_gate) * IDT_NUM_ENTRIES;
+	ptr.size = sizeof(struct idt_gate) * IDT_NUM_ENTRIES - 1; 
 	ptr.address = (unsigned int)&idt;
 
 	// Hardware Generated Exceptions
@@ -124,8 +124,9 @@ void idt_init()
 void create_idt_gate(unsigned short n, unsigned int handler,
 		unsigned short type, unsigned short pl)
 {
-	idt[n].offset_low 	=	handler & (0xFFFF);
-	idt[n].offset_high 	= 	(handler >> 16) & (0xFFFF);
+	idt[n].offset_low 	=	handler & (0x0000FFFF);
+	idt[n].offset_high 	= 	(handler >> 16) & (0x0000FFFF);
+	idt[n].segment_sel	= 	SEGSEL_KERNEL_CS;
 	// Reserved
 	idt[n].zero 		=	0;
 	// P -> Set to 1 for enabled interrupts
@@ -133,11 +134,10 @@ void create_idt_gate(unsigned short n, unsigned int handler,
 	// S -> Set to 0 for interrupts gates
 	// Type -> Gate Types 
 	idt[n].config		=	 (0x1 << 7) | 
-					 ((pl << 0x03) << 5) | 
-					 (0x0 << 4) | 
+					 ((pl & 0x03) << 5) | 
 					 (0x1 << 3) | 
 					 (0x1 << 2) | 
 					 (0x1 << 1) | 
-					 (type & 0x01);
+					 type;
 }
 

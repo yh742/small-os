@@ -1,7 +1,10 @@
 #include "gdt.h"
 #include "idt.h"
+#include "pic.h"
 #include "stdio.h"
 #include "serial.h"
+#include "keyboard.h"
+#include "interrupt.h"
 
 int sum_of_three(int arg1, int arg2, int arg3)
 {
@@ -33,5 +36,10 @@ int kmain()
 	gdt_init();
 	printf("%u. IDT init here\n", 2);
 	idt_init();
+	printf("%u. PIC init here\n", 3);
+	pic_init();
+	printf("%u. KBD init here\n", 4);
+	kbd_init();
+	enable_interrupts();
 	return 0;
 }
