@@ -12,6 +12,11 @@
 static char *fb = (char *)FB_MEMORY;
 static int curr_pos = 0;
 
+void fb_init()
+{
+	curr_pos = 80*8;
+}
+
 void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg)
 {
 	fb[i] = c;
@@ -72,23 +77,20 @@ void fb_write_hex(unsigned int n)
 	unsigned char b = 0;
 	int i;
 
-	fb_write_s("0x");
+	fb_write("0x", 2);
 	for (i = 7; i >= 0; --i) {
 		b = (n >> i*4) & 0x0F;
 	        fb_write_byte(&chars[b]);
 	}
 }
 
-
-
 void fb_write_s(char *buf)
 {
 	char *c;
 	unsigned int len = 0;
-	for (c = buf; *c < '\0'; c++)
+	for (c = buf; *c != '\0'; c++)
 		len++;
-	fb_write(buf, len);
-	
+	fb_write(buf, len);	
 }
 
 int fb_write(char *buf, unsigned int len)

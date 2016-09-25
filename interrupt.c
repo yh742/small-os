@@ -16,7 +16,7 @@ unsigned int register_interrupt_handler(unsigned int interrupt, interrupt_handle
 		return 1;
 	}
 
-	printf("Registering interrupt #%u", interrupt);
+	printf("Registering interrupt #%u\n", interrupt);
 	interrupt_handlers[interrupt] = handler;
 	return 0;
 }
@@ -29,6 +29,6 @@ void interrupt_handler(struct cpu_info state, struct idt_info info, struct stack
 	}
 	else
 	{
-		printf("Interrupt handler for IRQ#%u does not exist!", info.idt_index);
+		printf("Interrupt handler for IRQ#%u does not exist!\n", info.idt_index);
 	}
 }
