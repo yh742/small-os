@@ -80,7 +80,8 @@ set_up_kernel_pt:
 .loop:
 	mov [eax], ecx
 	add eax, 4
-	; adds 4kb directly to kernel config since 10 high bits are address
+	; adds 4kb (0x1000) directly to kernel config since 20 high bits are address
+	; starts from zero in KERNEL_PT_CFG to map high to 0x0
 	add ecx, FOUR_KB
 	cmp ecx, kernel_physical_end
 	jle .loop
@@ -103,7 +104,6 @@ enable_paging:
 	lea ecx, [higher_half]
 	; Must use register to do absolute address jump
 	jmp ecx
-
 
 higher_half:
 	mov [kernel_pdt], DWORD 0

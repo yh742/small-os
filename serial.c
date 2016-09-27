@@ -11,15 +11,11 @@
 
 #define SERIAL_LINE_ENABLE_DLAB		0x80
 
-void serial_configure_baud_rate(unsigned short com, unsigned short divisor)
+void serial_init(unsigned short com, unsigned short divisor)
 {
 	outb(SERIAL_LINE_COMMAND_PORT(com), SERIAL_LINE_ENABLE_DLAB);	
 	outb(DLAB_HI_BYTE_PORT(com), (divisor >> 8) & 0x00FF);
 	outb(DLAB_LOW_BYTE_PORT(com), (divisor) & 0x00FF);
-}
-
-void serial_configure_line(unsigned short com)
-{
 	outb(SERIAL_LINE_COMMAND_PORT(com), 0x03);
 	outb(SERIAL_FIFO_COMMAND_PORT(com), 0xC7);
 	outb(SERIAL_MODEM_COMMAND_PORT(com), 0x03);
