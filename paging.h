@@ -2,7 +2,7 @@
 #define PAGING_H_
 
 #define PAGING_READ_ONLY	0
-#define PAGING_WRITE_ONLY 	1
+#define PAGING_READ_WRITE 	1
 #define PAGING_PL0		0
 #define PAGING_PL3		1
 
@@ -22,11 +22,8 @@ unsigned int pdt_map_kernel_memory(unsigned int paddr,
 unsigned int pdt_unmap_kernel_memory(unsigned int vaddr, 
 				unsigned int size);
 unsigned int pdt_unmap_memory(pde_t *pdt,
-			unsigned int paddr,
 			unsigned int vaddr,
-			unsigned int size,
-			unsigned char rw,
-			unsigned char pl);
+			unsigned int size);
 
 pde_t *pdt_create(unsigned int *out_paddr);
 

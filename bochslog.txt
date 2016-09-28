@@ -31,7 +31,7 @@
 00000000000i[      ]   SB16 support: no
 00000000000i[      ]   USB support: no
 00000000000i[      ]   VGA extension support: vbe
-00000000000i[MEM0  ] allocated memory at 0x2b60da070010. after alignment, vector=0x2b60da071000
+00000000000i[MEM0  ] allocated memory at 0x2b8324900010. after alignment, vector=0x2b8324901000
 00000000000i[MEM0  ] 32.00MB
 00000000000i[MEM0  ] mem block size = 0x00100000, blocks=32
 00000000000i[MEM0  ] rom at 0xfffe0000/131072 ('/usr/share/bochs/BIOS-bochs-latest')
@@ -41,7 +41,7 @@
 00000000000i[DEV   ] PIIX3 PCI-to-ISA bridge present at device 1, function 0
 00000000000i[PLUGIN] init_dev of 'cmos' plugin device by virtual method
 00000000000i[CMOS  ] Using local time for initial clock
-00000000000i[CMOS  ] Setting initial clock to: Tue Sep 27 00:13:23 2016 (time0=1474960403)
+00000000000i[CMOS  ] Setting initial clock to: Wed Sep 28 00:19:15 2016 (time0=1475047155)
 00000000000i[PLUGIN] init_dev of 'dma' plugin device by virtual method
 00000000000i[DMA   ] channel 4 used by cascade
 00000000000i[PLUGIN] init_dev of 'pic' plugin device by virtual method
@@ -68,7 +68,7 @@
 00000000000i[CD1   ] load cdrom with path='os.iso'
 00000000000i[CD1   ] Opening image file as a cd.
 00000000000i[HD    ] Media present in CD-ROM drive
-00000000000i[HD    ] Capacity is 249 sectors (0.49 MB)
+00000000000i[HD    ] Capacity is 254 sectors (0.50 MB)
 00000000000i[HD    ] Using boot sequence cdrom, none, none
 00000000000i[HD    ] Floppy boot signature check is enabled
 00000000000i[PLUGIN] init_dev of 'pci_ide' plugin device by virtual method
@@ -174,31 +174,28 @@
 00001818211i[PCI   ] i440FX PMC write to PAM register 59 (TLB Flush)
 00001818935i[BIOS  ] bios_table_cur_addr: 0x000fbb54
 00005700208i[BIOS  ] IDE time out
-00680164945i[BIOS  ] Booting from 07c0:0000
-00680269051i[BIOS  ] int13_harddisk: function 41, unmapped device for ELDL=80
-00680273827i[BIOS  ] int13_harddisk: function 08, unmapped device for ELDL=80
-00680278481i[BIOS  ] *** int 15h function AX=00c0, BX=0000 not yet supported!
-01236048000i[KBD   ] internal keyboard buffer full, ignoring scancode.(0f)
-01236048000i[KBD   ] internal keyboard buffer full, ignoring scancode.(8f)
-01283276064i[      ] Ctrl-C detected in signal handler.
-01283276065i[      ] Ctrl-C detected in signal handler.
-01283276065i[      ] dbg: Quit
-01283276065i[CPU0  ] CPU is in protected mode (active)
-01283276065i[CPU0  ] CS.mode = 32 bit
-01283276065i[CPU0  ] SS.mode = 32 bit
-01283276065i[CPU0  ] EFER   = 0x00000000
-01283276065i[CPU0  ] | EAX=00103420  EBX=0002cd80  ECX=e0000011  EDX=0010300b
-01283276065i[CPU0  ] | ESP=00067ed0  EBP=00067ee0  ESI=0002cf08  EDI=0002cf09
-01283276065i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df if tf SF zf af PF cf
-01283276065i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
-01283276065i[CPU0  ] |  CS:0008( 0001| 0|  0) 00000000 ffffffff 1 1
-01283276065i[CPU0  ] |  DS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-01283276065i[CPU0  ] |  SS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-01283276065i[CPU0  ] |  ES:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-01283276065i[CPU0  ] |  FS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-01283276065i[CPU0  ] |  GS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-01283276065i[CPU0  ] | EIP=0010006c (0010006c)
-01283276065i[CPU0  ] | CR0=0xe0000011 CR2=0x00000000
-01283276065i[CPU0  ] | CR3=0x00104008 CR4=0x00000010
-01283276065i[CMOS  ] Last time is 1474961686 (Tue Sep 27 00:34:46 2016)
-01283276065i[SIM   ] quit_sim called with exit code 0
+01838185487i[BIOS  ] Booting from 07c0:0000
+01838289593i[BIOS  ] int13_harddisk: function 41, unmapped device for ELDL=80
+01838294369i[BIOS  ] int13_harddisk: function 08, unmapped device for ELDL=80
+01838299023i[BIOS  ] *** int 15h function AX=00c0, BX=0000 not yet supported!
+02437863000i[      ] Ctrl-C detected in signal handler.
+02437863000i[      ] dbg: Quit
+02437863000i[CPU0  ] CPU is in protected mode (active)
+02437863000i[CPU0  ] CS.mode = 32 bit
+02437863000i[CPU0  ] SS.mode = 32 bit
+02437863000i[CPU0  ] EFER   = 0x00000000
+02437863000i[CPU0  ] | EAX=00105428  EBX=0002cd80  ECX=c0100074  EDX=0010500b
+02437863000i[CPU0  ] | ESP=c0109c00  EBP=00067ee0  ESI=0002cf08  EDI=0002cf09
+02437863000i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df if tf SF zf af PF cf
+02437863000i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
+02437863000i[CPU0  ] |  CS:0008( 0001| 0|  0) 00000000 ffffffff 1 1
+02437863000i[CPU0  ] |  DS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+02437863000i[CPU0  ] |  SS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+02437863000i[CPU0  ] |  ES:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+02437863000i[CPU0  ] |  FS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+02437863000i[CPU0  ] |  GS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+02437863000i[CPU0  ] | EIP=c01000b4 (c01000b4)
+02437863000i[CPU0  ] | CR0=0xe0000011 CR2=0x00000000
+02437863000i[CPU0  ] | CR3=0x00106008 CR4=0x00000010
+02437863000i[CMOS  ] Last time is 1475049592 (Wed Sep 28 00:59:52 2016)
+02437863000i[SIM   ] quit_sim called with exit code 0

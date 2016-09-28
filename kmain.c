@@ -51,6 +51,11 @@ static unsigned int kinit(kernel_meminfo_t *mem,
 	if (res != 0) {
 		return KINIT_ERROR_INIT_PAGING;
 	}
+	
+	res = pfa_init(mbinfo, mem);// fs_paddr, fs_size);
+	if (res != 0) {
+		return KINIT_ERROR_INIT_PFA;
+	}
 
 	enable_interrupts();
 	return 0;

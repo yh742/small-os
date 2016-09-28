@@ -3,14 +3,16 @@
 #include "constants.h"
 #include "stdio.h"
 #include "page_frame_allocator.h"
+#include "stddef.h"
+#include "string.h"
 
 #define NUM_ENTRIES 1024
 #define PDT_SIZE NUM_ENTRIES * sizeof(pde_t)
-#define PT_SIZE NUM_ENTRIES * sizeof(pte_t);
+#define PT_SIZE NUM_ENTRIES * sizeof(pte_t)
 
 #define IS_ENTRY_PRESENT(e)	((e)->config && 0x01)
 // Global flag is set for page table
-#define IS_ENTRY_PAGE_TABLE(e)	((e)->config && 0x80) == 0)
+#define IS_ENTRY_PAGE_TABLE(e)	(((e)->config && 0x80) == 0)
 
 #define PS_4KB 			0x00
 #define PS_4MB			0x01
@@ -44,11 +46,11 @@ struct pte {
 typedef struct pte pte_t;
 
 static pde_t *kernel_pdt;
-static pte_t *Kernel_pt
+static pte_t *kernel_pt;
 
 // Defined in assembly
-extern set_pdt(unsigned int pdt_addr);
-extern invalidate_page_table_entry(unsigned int vaddr);
+extern void pdt_set(unsigned int pdt_addr);
+extern void invalidate_page_table_entry(unsigned int vaddr);
 
 static void create_pdt_entry(pde_t *pdt,
 			unsigned int n,
@@ -139,26 +141,28 @@ static unsigned int pt_kernel_find_next_vaddr(unsigned int pdt_idx, pte_t *pt, u
 				org_i = i;
 			}	
 			++num_found;
-			if (num_found = num_to_find){
+			if (num_found == num_to_find) {
 				// OR PDT and PT address together
 				return PDT_IDX_TO_VIRTUAL(pdt_idx) |
 					PT_IDX_TO_VIRTUAL(org_i);
 			}
 		}
 	}
+
+	return 0;
 }
 
 // Look in kernel space for the next vaddr
 unsigned pdt_kernel_find_next_vaddr(unsigned int size)
 {
-	unsigned int pdt_idx, pt_addr, pt_vaddr, tmp_entry, vaddr = 0;
+	unsigned int pdt_idx, pt_paddr, pt_vaddr, tmp_entry, vaddr = 0;
 	
 	pdt_idx = VIRTUAL_TO_PDT_IDX(KERNEL_START_VADDR);
 	for (; pdt_idx < NUM_ENTRIES; ++pdt_idx){
 		if (IS_ENTRY_PRESENT(kernel_pdt + pdt_idx)){
 			tmp_entry = kernel_get_temporary_entry();
 			pt_paddr = get_pt_paddr(kernel_pdt, pdt_idx);
-			pt_vaddr = kernel_map_temporary_memory(pt_addr);
+			pt_vaddr = kernel_map_temporary_memory(pt_paddr);
 			vaddr = pt_kernel_find_next_vaddr(pdt_idx, (pte_t *) pt_vaddr, size);
 			kernel_set_temporary_entry(tmp_entry);
 		} else {
@@ -186,8 +190,8 @@ static unsigned int pt_map_memory(pte_t *pt,
 
 	while (mapped_size < size && pt_idx < NUM_ENTRIES){
 		if (IS_ENTRY_PRESENT(pt + pt_idx)){
-			printf("paging mapping: i
-				Entry is present: pt: %X, pt_idx %u, pdt_idx: %u
+			printf("paging mapping: i \
+				Entry is present: pt: %X, pt_idx %u, pdt_idx: %u \
 				pt[pt_idx]: %X\n",
 				pt, pt_idx, pdt_idx, pt[pt_idx]);
 			return mapped_size;	
@@ -229,11 +233,8 @@ unsigned int pdt_map_memory(pde_t *pdt,
         if (!IS_ENTRY_PRESENT(pdt + pdt_idx)) {
             pt_paddr = pfa_allocate(1);
             if (pt_paddr == 0) {
-                log_error("pdt_map_memory",
-                          "Couldn't allocate page frame for new page table."
-                          "pdt_idx: %u, data vaddr: %X, data paddr: %X, "
-                          "data size: %u\n",
-                          pdt_idx, vaddr, paddr, size);
+                printf("pdt_map_memory: Couldn't allocate page frame for new page table. \
+			pdt_idx: %u, data vaddr: %X, data paddr: %X, data size: %u\n", pdt_idx, vaddr, paddr, size);
                 return 0;
             }
             pt_vaddr = kernel_map_temporary_memory(pt_paddr);
@@ -248,9 +249,9 @@ unsigned int pdt_map_memory(pde_t *pdt,
             pt_map_memory(pt, pdt_idx, paddr, vaddr, size, rw, pl);
 
         if (mapped_size == 0) {
-            log_error("pdt_map_memory",
-                      "Could not map memory in page table. "
-                      "pt: %X, paddr: %X, vaddr: %X, size: %u\n",
+            printf("pdt_map_memory: \
+                      Could not map memory in page table. \
+                      pt: %X, paddr: %X, vaddr: %X, size: %u\n",
                       (unsigned int) pt, paddr, vaddr, size);
             kernel_set_temporary_entry(tmp_entry);
             return 0;
@@ -381,9 +382,9 @@ pde_t *pdt_create(unsigned int *out_paddr)
 
 void pdt_delete(pde_t* pdt)
 {
-	unsigned int i, pdt_addr;
+	unsigned int i, pdt_paddr;
 	for (i = 0; i < NUM_ENTRIES; ++i){
-		if (IS_ENTRY_PRESENT(pdt + i) && IS_ENTRY_PAGE_TABLE(pdt + i)){
+		if (IS_ENTRY_PRESENT(pdt + i) && IS_ENTRY_PAGE_TABLE(pdt + i)) {
 			pfa_free(get_pt_paddr(pdt, i));
 		}
 	}
@@ -392,7 +393,6 @@ void pdt_delete(pde_t* pdt)
 	pfa_free(pdt_paddr);
 }
 
-void pdt_set(unsigned int pdt_paddr)
 void pdt_load_process_pdt(pde_t *pdt, unsigned int pdt_paddr)
 {
 	// To load a new process copy the kernel directory table
