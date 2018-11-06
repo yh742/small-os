@@ -1,5 +1,5 @@
 # small-os
-An tiny operating system that runs on Bochs emulator fo IA-32 platform.
+An tiny operating system that runs on Bochs emulator fo x86 platform.
 
 ## What is this?
 A small OS pieced together based on information floating around various websites (mostly OSDev and wikipedia).
